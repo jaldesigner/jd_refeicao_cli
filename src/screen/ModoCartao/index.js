@@ -116,7 +116,7 @@ const ModoPagamento = ({ navigation }) => {
       ID_USER: auth().currentUser.uid,
       Forma_de_Pagamento: "Cartão",
       Pedido: pedido,
-      Total_Pagar: S_Total,
+      Total_Pagar: v,
       Endereco: Endereco,
       Execucao: false,
       Entrega: false,

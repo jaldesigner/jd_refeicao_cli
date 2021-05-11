@@ -16,6 +16,7 @@ export default function Login({ navigation }) {
   const [exibeSenha, setExibeSenha] = useState(true);
   //const net = NetInf.useNetInfo();
   const [conex, setConex] = useState(0);
+  const [loading, setLoading] = useState(false);
 
 
   useEffect(() => {
@@ -36,6 +37,7 @@ export default function Login({ navigation }) {
   useEffect(() => {
     NetInf.fetch().then(state => {
       setConex(state);
+      setLoading(conex.isConnected);
     });
 
     const unsubscribe = NetInf.addEventListener(state => {
@@ -46,19 +48,37 @@ export default function Login({ navigation }) {
       unsubscribe();
     };
 
-  }, []);
+  }, [loading]);
+
+  function VerificaConexao(){
+    if(loading){
+      setTimeout(() => {
+        setLoading(false);
+      }, 5000);
+    }else{
+
+    }
+    return null;
+  }
 
   function Teste() {
     if (!conex.isInternetReachable || !conex.isConnected) {
       return (
-        <Modal visible={true}>
-          <View style={{justifyContent:'center', alignItems:'center', marginTop:20, flexDirection:'column'}}>
-            <Text style={{textAlign:'center', fontSize:20}}>Verifique sua conexão com a internet!</Text>
-            <Image source={require('../../img/rede.png')} width={'50%'} height={'50%'} resizeMode='center' />
+        <>
+        <VerificaConexao />
+        <Modal visible={loading} transparent={true}>
+          <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 20, flex:1, backgroundColor:'#800808', opacity:0.9}}>
+            <View>
+            <Text style={{color:'#fff'}}>Aguarde...</Text>
+              {/* <Text style={{ textAlign: 'center', fontSize: 20 }}>Verifique sua conexão com a internet!</Text> */}
+              <ActivityIndicator animating={true} color="#fff" size="large" />
+            </View>
           </View>
         </Modal>
+        </>
       );
-    }else{
+    } else {
+      //setLoading(false);
       return null
     }
   }

@@ -124,15 +124,19 @@ const Cardapio = ({ navigation }) => {
         var acmp = listalp.acompanhamento == '' ? '' : ' com ' + listalp.acompanhamento;
         var acmp = acmp.replace(',', ' e ')
 
-        return (
-          <View key={indexLP}>
-            <BtnComandoCardapio
-              prato={listalp.prato + (acmp)}
-              contaPrato={getOccurrence(arrayPedidos(pedidos), listalp.prato)}
-              adiciona={acrescentaPedido}
-              retira={retiraPedido} />
-          </View>
-        );
+        //console.log(item.data().Cardapio[1]);
+
+        if (item.data().Cardapio[indexLP].ativo == true) {
+          return (
+            <View key={indexLP}>
+              <BtnComandoCardapio
+                prato={listalp.prato + (acmp)}
+                contaPrato={getOccurrence(arrayPedidos(pedidos), listalp.prato)}
+                adiciona={acrescentaPedido}
+                retira={retiraPedido} />
+            </View>
+          );
+        }
       });
       return listaLP;
     });
@@ -142,7 +146,7 @@ const Cardapio = ({ navigation }) => {
   const BtnProximo = () => {
     if (pedidos.length > 0) {
       return (
-        <View style={{marginTop:5}}>
+        <View style={{ marginTop: 5 }}>
           <TouchableOpacity style={styles.btnY}
             onPress={() => navigation.navigate('Tamanho', { auto: 0 })}
           >
@@ -157,8 +161,8 @@ const Cardapio = ({ navigation }) => {
     if (!arrayPratoDia.length) {
       return (
         <Card>
-          <Text>Ainda não há o cardápio do dia</Text>
-          <Text>Aguarde...</Text>
+          <Text style={{ textAlign: 'center' }}>Ainda não há o cardápio do dia</Text>
+          <Text style={{ textAlign: 'center' }}>Aguarde...</Text>
         </Card>
       );
     }
