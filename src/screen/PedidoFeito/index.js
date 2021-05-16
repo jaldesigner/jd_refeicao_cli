@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { Button, Icon} from 'react-native-elements';
-import { View, Text, ScrollView, TouchableOpacity, } from 'react-native';
+import { Button, Icon } from 'react-native-elements';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { HeaderGeral } from '../../components';
 import db from '@react-native-firebase/firestore';
@@ -37,9 +37,9 @@ export default function PedidoFeito({ navigation }) {
       return (
         <>
           <TouchableOpacity onPress={() => alert("Próxima configuração\nAguarde...")}
-          style={{}}
+            style={{}}
           >
-            <Text style={{color:'#34E43B', fontSize:18}}>Ver detalhes do pedido</Text>
+            <Text style={{ color: '#34E43B', fontSize: 18 }}>Ver detalhes do pedido</Text>
           </TouchableOpacity>
         </>
       );
@@ -55,7 +55,7 @@ export default function PedidoFeito({ navigation }) {
       dataTl[index] = [
         {
           title: item.data().Hora_Pedido + ' - ' + 'Pedido feito',
-          description: detalhePedidos({...item.data()}),
+          description: detalhePedidos({ ...item.data() }),
         },
         {
           title: 'Pedido em execução',
@@ -109,9 +109,71 @@ export default function PedidoFeito({ navigation }) {
         <TouchableOpacity style={styles.btnG} onPress={() => { navigation.navigate('Cardapio') }}>
           <Text style={styles.txtBtn}>Novo Pedido</Text>
         </TouchableOpacity>
-        
+
       </View>
-      <Tmln />
+      {/* <Tmln /> */}
+
+
+
+      {/* Criação da TimeLine */}
+
+
+      <View style={estlTML.boxTML}>
+        <View style={estlTML.ttlInicial}>
+          <View style={{ width: 30, backgroundColor: '#aaa' }}>
+            <View style={estlTML.circ1} />
+          </View>
+          <View>
+            <Text>Pedido Feito</Text>
+          </View>
+        </View>
+        <View style={{flexDirection:'row'}}>
+          <View style={{ backgroundColor: '#999', width: 30, alignItems:'center'}}>
+            <View style={{width:2, backgroundColor:"#000", height:40}} />
+          </View>
+        </View>
+        <View style={estlTML.ttlInicial}>
+          <View style={{ width: 30, backgroundColor: '#aaa' }}>
+            <View style={estlTML.circ1} />
+          </View>
+          <View>
+            <Text>Pedido em execução</Text>
+          </View>
+        </View>
+        <View style={{flexDirection:'row'}}>
+          <View style={{ backgroundColor: '#999', width: 30, alignItems:'center'}}>
+            <View style={{width:2, backgroundColor:"#000", height:40}} />
+          </View>
+        </View>
+        <View style={estlTML.ttlInicial}>
+          <View style={{ width: 30, backgroundColor: '#aaa' }}>
+            <View style={estlTML.circ1} />
+          </View>
+          <View>
+            <Text>Destinado a entrega</Text>
+          </View>
+        </View>
+      </View>
+
+
+      {/* Fim da Criação da TimeLine */}
+
     </>
   )
 }
+
+const estlTML = StyleSheet.create({
+  boxTML: {
+    backgroundColor: '#ddd',
+    margin:16,
+  },
+  ttlInicial: {
+    flexDirection: 'row',
+  },
+  circ1: {
+    backgroundColor: 'red',
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+  }
+});

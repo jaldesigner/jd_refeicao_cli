@@ -69,7 +69,7 @@ const aparencia = StyleSheet.create({
     borderColor: '#C23A0F',
     borderRadius: 10,
     width: '100%',
-    padding:10,
+    padding:5,
   },
 
   btnComandoMenos: {
