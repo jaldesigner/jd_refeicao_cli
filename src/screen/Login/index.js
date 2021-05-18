@@ -23,7 +23,7 @@ export default function Login({ navigation }) {
     const at = aut.onUserChanged((user) => {
       if (user) {
         setUid(auth().currentUser.uid);
-        navigation.navigate("Cardapio");
+        navigation.navigate("Cardapio",{auto:0});
       }
 
     });
@@ -93,7 +93,7 @@ export default function Login({ navigation }) {
           setSenha("");
           setEmail("");
           setExibeSenha(true);
-          navigation.navigate('Cardapio');
+          navigation.navigate('Cardapio',{auto:0});
         } catch (err) {
           switch (err.code) {
             case 'auth/user-not-found':
@@ -148,7 +148,7 @@ export default function Login({ navigation }) {
       <ScrollView>
         <View style={stl.boxImgLogo} >
           <Image style={stl.imgLogo} source={require("../../img/logo.png")} />
-          <Text style={{ fontSize: 30, color: '#fff', fontWeight: 'bold' }}>JD REFEIÇÕES</Text>
+          <Text style={{ fontSize: 26, color: '#fff', fontWeight: 'bold' }}>JD REFEIÇÕES</Text>
         </View>
 
         {/* <Image style={stl.imgLogo} source={require("../../img/logo.png")} /> */}
@@ -242,7 +242,7 @@ export default function Login({ navigation }) {
               }}
             >
 
-              <Icon name={!exibeSenha ? "eye-slash" : "eye"} size={15} type="font-awesome-5" color="#fff" style=
+              <Icon name={!exibeSenha ? "eye" : "eye-slash"} size={15} type="font-awesome-5" color="#fff" style=
                 {{
                   backgroundColor: '#222',
                   borderRadius: 20,
@@ -273,7 +273,7 @@ export default function Login({ navigation }) {
 const stlLogin = StyleSheet.create({
   boxInput: {
     position: 'relative',
-    marginTop: 40,
+    marginTop: 20,
     marginLeft: 20,
     marginRight: 20,
     //marginBottom: 30,
@@ -335,7 +335,7 @@ const stl = StyleSheet.create({
   imgLogo: {
     resizeMode: 'contain',
     width: '100%',
-    height: 150,
+    height: 100,
     marginTop: 30,
     marginBottom: 10,
   },

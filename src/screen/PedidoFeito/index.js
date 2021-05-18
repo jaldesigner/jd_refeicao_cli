@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { Button, Icon } from 'react-native-elements';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { Button, Icon, Card } from 'react-native-elements';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { HeaderGeral } from '../../components';
 import db from '@react-native-firebase/firestore';
 import { styles } from '../../style';
 import DadosApp from '../../config';
-import Timeline from 'react-native-timeline-flatlist';
+//import Timeline from 'react-native-timeline-flatlist';
 import moment from 'moment';
 moment.locale('pt-br');
 
@@ -19,6 +19,8 @@ const PathDB = db().collection(INF.Categoria).doc(INF.ID_APP);
 export default function PedidoFeito({ navigation }) {
   const [pedido, setPedido] = useState([]);
   const [dataTl, setDataTl] = useState([]);
+  const [modal, setModal] = useState(false);
+  const [detalhe, setDetalhe] = useState([]);
 
   useFocusEffect(useCallback(() => {
     const ped = PathDB.collection('Pedidos')
@@ -32,148 +34,248 @@ export default function PedidoFeito({ navigation }) {
 
   }, [dataTl]));
 
-  const Tmln = () => {
-    const detalhePedidos = (idPedido) => {
-      return (
-        <>
-          <TouchableOpacity onPress={() => alert("Próxima configuração\nAguarde...")}
-            style={{}}
-          >
-            <Text style={{ color: '#34E43B', fontSize: 18 }}>Ver detalhes do pedido</Text>
-          </TouchableOpacity>
-        </>
-      );
-    };
+  const detalhePedidos = (pdd) => {
+    if (pdd.length == 0) {
+      return null;
+    } else if (pdd.length == undefined) {
+      var contaPedidos = pdd.Pedido.length;
 
-    const listaPedido = pedido.map((item, index) => {
-      let colorStateExecucao = item.data().Execucao == false ? '#ddd' : '#FFAF00';
-      let colorStateExecucao2 = item.data().Execucao == false ? '#aaa' : '#800808';
+      let pd = pdd.Pedido.map((item, index) => {
+        return (
+          <View key={index}>
+            <View style={estlTML.boxTxtM}>
+              <Text style={estlTML.txtChave}>Pedido:</Text>
+              <Text style={estlTML.txtValor}>{item.ContaPedidos + 1}</Text>
+            </View>
 
-      let colorStateEntrega = item.data().Entrega == false ? '#ddd' : '#FFAF00';
-      let colorStateEntrega2 = item.data().Entrega == false ? '#aaa' : '#800808';
+            <View style={estlTML.boxTxtM}>
+              <Text style={estlTML.txtChave}>Prato:</Text>
+              <Text style={estlTML.txtValor}>{item.prato}</Text>
+            </View>
 
-      dataTl[index] = [
-        {
-          title: item.data().Hora_Pedido + ' - ' + 'Pedido feito',
-          description: detalhePedidos({ ...item.data() }),
-        },
-        {
-          title: 'Pedido em execução',
-          dotColor: colorStateExecucao2,
-          circleColor: colorStateExecucao,
-          titleStyle: {
-            color: colorStateExecucao2,
-            fontSize: 20
-          },
-          lineColor: colorStateExecucao2,
-          circleSize: 20,
-        },
-        {
-          title: 'Pedido enviado para você',
-          dotColor: colorStateEntrega2,
-          circleColor: colorStateEntrega,
-          titleStyle: {
-            color: colorStateEntrega2,
-            fontSize: 20
-          },
-          circleSize: 20,
-        },
-      ]
-    });
+            <View style={estlTML.boxTxtM}>
+              <Text style={estlTML.txtChave}>Medida:</Text>
+              <Text style={estlTML.txtValor}>{item.Medida}</Text>
+            </View>
 
-    return (
-      <Timeline data={dataTl.flat(Infinity)}
-        innerCircle={'dot'}
-        circleSize={30}
-        dotColor="#800808"
-        circleColor="#FFAF00"
-        lineColor="#FFAF00"
-        titleStyle={{ color: '#800808', fontSize: 20 }}
+            <View style={estlTML.boxTxtM}>
+              <Text style={estlTML.txtChave}>Valor:</Text>
+              <Text style={estlTML.txtValor}>R${item.Valor}</Text>
+            </View>
+            {/* <Text>Prato: {item.prato}</Text>
+            <Text>Medida: {item.Medida}</Text>
+            <Text>Valor: {item.Valor}</Text> */}
+            <View>
+              {contaPedidos > 1 ? <Card.Divider style={{ marginTop: 10 }} /> : null}
+            </View>
+          </View>
+        );
+      });
+      return pd;
+    }
+    //console.log();
 
-
-        style={{
-          marginTop: 10,
-        }}
-      />
-    );
   };
 
-  const DetalhePedido = () => {
+  const Tmln = () => {
+
+    const listaPedido = pedido.map((item, index) => {
+      let colorStateExecucao = item.data().Execucao == false ? '#ddd' : '#34E43B';
+      let circuloExecucao = item.data().Execucao == false ? estlTML.circ2 : estlTML.circ1;
+
+      let colorStateEntrega = item.data().Entrega == false ? '#ddd' : '#34E43B';
+      let circuloEnterga = item.data().Entrega == false ? estlTML.circ2 : estlTML.circ1;
+      let lineEntrega = item.data().Entrega == false ? estlTML.line2 : estlTML.line;
+
+
+      return (
+        <View key={index}>
+          <Card>
+            <Card.Title>
+              <Text style={estlTML.txtTitulo}>Horário: {item.data().Hora_Pedido}</Text>
+            </Card.Title>
+            <Card.Divider />
+            <View style={estlTML.boxTML}>
+              <View style={estlTML.ttlInicial}>
+                <View style={estlTML.boxCirculo}>
+                  <View style={estlTML.circ1}>
+                    <Icon color="#34E43B" size={18} name='check' type='font-awesome-5' />
+                  </View>
+                </View>
+                <View>
+                  <Text style={estlTML.txtAtivo}>Pedido Feito</Text>
+                </View>
+              </View>
+              <View style={{ flexDirection: 'row' }}>
+                <View style={estlTML.boxLine}>
+                  <View style={estlTML.line} />
+                </View>
+              </View>
+              <View style={estlTML.ttlInicial}>
+                <View style={estlTML.boxCirculo}>
+                  <View style={circuloExecucao}>
+                    <Icon color={colorStateExecucao} size={18} name='check' type='font-awesome-5' />
+                  </View>
+                </View>
+                <View>
+                  <Text style={estlTML.txtAtivo}>Pedido em execução</Text>
+                </View>
+              </View>
+              <View style={{ flexDirection: 'row' }}>
+                <View style={estlTML.boxLine}>
+                  <View style={lineEntrega} />
+                </View>
+              </View>
+              <View style={estlTML.ttlInicial}>
+                <View style={estlTML.boxCirculo}>
+                  <View style={circuloEnterga}>
+                    <Icon color={colorStateEntrega} size={18} name='check' type='font-awesome-5' />
+                  </View>
+                </View>
+                <View>
+                  <Text style={estlTML.txtAtivo}>Destinado a entrega</Text>
+                </View>
+              </View>
+            </View>
+            <Card.Divider style={{ marginTop: 10 }} />
+            <View>
+              <TouchableOpacity
+                onPress={() => {
+                  setDetalhe(item.data());
+                  setModal(true);
+                }}
+                style={{ alignItems: 'center' }}>
+                <Text style={{ color: '#34E43B', fontSize: 14 }}>Ver detalhes do pedido</Text>
+              </TouchableOpacity>
+            </View>
+          </Card>
+        </View>
+      );
+    });
+
+    return listaPedido;
 
   };
 
   return (
     <>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modal}
+      >
+        <View style={estlTML.boxModal}>
+          <View>
+            <TouchableOpacity onPress={() => {
+              setDetalhe([]);
+              setModal(false);
+            }} style={estlTML.btnX}>
+              <Text style={estlTML.txtBtnX}>X</Text>
+            </TouchableOpacity>
+          </View>
+          <Card>
+            <Card.Title><Text style={estlTML.txtTitulo}>Detalhe do Pedido</Text></Card.Title>
+            <Card.Divider />
+            {detalhePedidos(detalhe)}
+          </Card>
+        </View>
+      </Modal>
       <HeaderGeral />
-      <View style={{ margin: 20 }}>
+      <Card>
         <TouchableOpacity style={styles.btnG} onPress={() => { navigation.navigate('Cardapio') }}>
           <Text style={styles.txtBtn}>Novo Pedido</Text>
         </TouchableOpacity>
 
-      </View>
-      {/* <Tmln /> */}
-
-
-
-      {/* Criação da TimeLine */}
-
-
-      <View style={estlTML.boxTML}>
-        <View style={estlTML.ttlInicial}>
-          <View style={{ width: 30, backgroundColor: '#aaa' }}>
-            <View style={estlTML.circ1} />
-          </View>
-          <View>
-            <Text>Pedido Feito</Text>
-          </View>
-        </View>
-        <View style={{flexDirection:'row'}}>
-          <View style={{ backgroundColor: '#999', width: 30, alignItems:'center'}}>
-            <View style={{width:2, backgroundColor:"#000", height:40}} />
-          </View>
-        </View>
-        <View style={estlTML.ttlInicial}>
-          <View style={{ width: 30, backgroundColor: '#aaa' }}>
-            <View style={estlTML.circ1} />
-          </View>
-          <View>
-            <Text>Pedido em execução</Text>
-          </View>
-        </View>
-        <View style={{flexDirection:'row'}}>
-          <View style={{ backgroundColor: '#999', width: 30, alignItems:'center'}}>
-            <View style={{width:2, backgroundColor:"#000", height:40}} />
-          </View>
-        </View>
-        <View style={estlTML.ttlInicial}>
-          <View style={{ width: 30, backgroundColor: '#aaa' }}>
-            <View style={estlTML.circ1} />
-          </View>
-          <View>
-            <Text>Destinado a entrega</Text>
-          </View>
-        </View>
-      </View>
-
-
-      {/* Fim da Criação da TimeLine */}
-
+      </Card>
+      <ScrollView>
+        <Tmln />
+      </ScrollView>
     </>
   )
 }
 
 const estlTML = StyleSheet.create({
   boxTML: {
-    backgroundColor: '#ddd',
-    margin:16,
+  },
+  boxCirculo: {
+    width: 30,
+  },
+  boxLine: {
+    width: 30,
+    alignItems: 'center',
+  },
+  line: {
+    width: 2,
+    backgroundColor: "#FFB800",
+    height: 40
+  },
+  line2: {
+    width: 2,
+    backgroundColor: "#ccc",
+    height: 40
   },
   ttlInicial: {
     flexDirection: 'row',
+    alignItems: 'center'
   },
   circ1: {
+    borderWidth: 2,
+    borderColor: '#FFB800',
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  circ2: {
+    borderWidth: 2,
+    borderColor: '#C4C4C4',
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  txtAtivo: {
+    color: '#4C0303',
+    marginLeft: 10,
+  },
+  txtTitulo: {
+    color: '#4C0303',
+  },
+  boxModal: {
+    backgroundColor: '#000',
+    opacity: 0.93,
+    flex: 1,
+    justifyContent: 'center',
+  },
+  btnX: {
     backgroundColor: 'red',
     width: 30,
     height: 30,
     borderRadius: 15,
-  }
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignSelf: 'flex-end',
+    marginRight: 15,
+  },
+  txtBtnX: {
+    color: "#fff",
+    textAlign: "center",
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  boxTxtM: {
+    flexDirection: 'row',
+  },
+  txtChave: {
+    color: "#4C0303",
+    fontWeight: 'bold',
+    marginBottom:10,
+    flex:1,
+  },
+  txtValor: {
+    color: "#FF5E00",
+    flex:3
+  },
 });

@@ -19,6 +19,7 @@ import ModoDinheiro from './screen/ModoDinheiro';
 import ModoCartao from './screen/ModoCartao';
 import Finalizacao from './screen/Finlizacao';
 import PedidoFeito from './screen/PedidoFeito';
+import Configuracao from './screen/Configuracao';
 import {Navleft} from './components/menu';
 
 const Drawer = createDrawerNavigator();
@@ -74,6 +75,10 @@ const Router = () => {
         <Drawer.Screen name="PedidoFeito" component={PedidoFeito}
           options={{ headerTransparent: true, title: false, headerLeft: null }}
         />
+        <Drawer.Screen name="Configuracao" component={Configuracao}
+          options={{ headerTransparent: true, title: false, headerLeft: null }}
+        />
+
       </Drawer.Navigator>
     </NavigationContainer>
   );
