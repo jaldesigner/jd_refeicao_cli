@@ -27,6 +27,8 @@ const Cardapio = ({ navigation }) => {
   const [ck2, setCk2] = useState();
   const [temPedidos, setTemPedidos] = useState([]);
 
+  //console.log(auth().currentUser.providerData);
+
   useFocusEffect(React.useCallback(() => {
     //Cadastro 1
     PathDB.collection('PerfilUsuario')
@@ -161,8 +163,7 @@ const Cardapio = ({ navigation }) => {
     if (!arrayPratoDia.length) {
       return (
         <Card>
-          <Text style={{ textAlign: 'center' }}>Ainda não há o cardápio do dia</Text>
-          <Text style={{ textAlign: 'center' }}>Aguarde...</Text>
+          <Text style={{ textAlign: 'center' }}>Não há cardápio</Text>
         </Card>
       );
     }

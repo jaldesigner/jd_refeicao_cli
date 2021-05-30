@@ -23,7 +23,7 @@ DerivedData
 
 # Android/
 #
-android/
+#android/
 *.hprof
 
 # Android/IntelliJ

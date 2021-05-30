@@ -41,8 +41,11 @@ export const styles = StyleSheet.create({
     height: 100,
   },
   areaBtnHome: {
+    marginTop: 20,
+    justifyContent:'space-between',
     alignItems: 'flex-end',
     flex: 1,
+    flexDirection:'row',
   },
   btnR: {
     elevation: 3,

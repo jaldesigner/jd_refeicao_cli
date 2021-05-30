@@ -20,6 +20,7 @@ import ModoCartao from './screen/ModoCartao';
 import Finalizacao from './screen/Finlizacao';
 import PedidoFeito from './screen/PedidoFeito';
 import Configuracao from './screen/Configuracao';
+import RedefinirSenha from './screen/Login/RedefinirSenha';
 import {Navleft} from './components/menu';
 
 const Drawer = createDrawerNavigator();
@@ -34,6 +35,9 @@ const Router = () => {
           options={{ headerTransparent: true, title: false, headerLeft: null }} />
         <Drawer.Screen name="Home" component={Home} />
         <Drawer.Screen name="Login" component={Login}
+          options={{ headerTransparent: true, title: false, headerLeft: null }}
+        />
+        <Drawer.Screen name="RedefinirSenha" component={RedefinirSenha}
           options={{ headerTransparent: true, title: false, headerLeft: null }}
         />
         <Drawer.Screen name="Cadastro" component={Cadastro}

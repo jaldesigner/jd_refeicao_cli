@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, ScrollView, TouchableOpacity, StyleSheet, ImageBackground, Image, ActivityIndicator, Modal } from 'react-native';
+import { Text, View, ScrollView, TouchableOpacity, StyleSheet, ImageBackground, Image, Button, ActivityIndicator, Modal } from 'react-native';
 import NetInf from '@react-native-community/netinfo';
+import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-google-signin/google-signin';
 import { Input, Icon } from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 import { styles } from '../../style';
+import RedefinirSenha from './RedefinirSenha';
+
+GoogleSignin.configure({
+  webClientId: '142759402212-rb73qd22lnlooja0l9o17d5v36q08oql.apps.googleusercontent.com',
+});
 
 const aut = auth();
 
@@ -17,13 +23,15 @@ export default function Login({ navigation }) {
   //const net = NetInf.useNetInfo();
   const [conex, setConex] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [infoUser, setInfoUser] = useState('');
+  const [rsModal, setRsModal] = useState(false);
 
 
   useEffect(() => {
     const at = aut.onUserChanged((user) => {
       if (user) {
         setUid(auth().currentUser.uid);
-        navigation.navigate("Cardapio",{auto:0});
+        navigation.navigate("Cardapio", { auto: 0 });
       }
 
     });
@@ -50,31 +58,43 @@ export default function Login({ navigation }) {
 
   }, [loading]);
 
-  function VerificaConexao(){
-    if(loading){
+  function VerificaConexao() {
+    if (loading) {
       setTimeout(() => {
         setLoading(false);
       }, 5000);
-    }else{
+    } else {
 
     }
     return null;
+  }
+
+  function RS() {
+    return (
+      <Modal animationType='slide' visible={rsModal} transparent={false}>
+        <View>
+          {/* <Image style={stl.imgLogo} source={require("../../img/logo.png")} /> */}
+        </View>
+        <RedefinirSenha />
+       
+      </Modal>
+    );
   }
 
   function Teste() {
     if (!conex.isInternetReachable || !conex.isConnected) {
       return (
         <>
-        <VerificaConexao />
-        <Modal visible={loading} transparent={true}>
-          <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 20, flex:1, backgroundColor:'#800808', opacity:0.9}}>
-            <View>
-            <Text style={{color:'#fff'}}>Aguarde...</Text>
-              {/* <Text style={{ textAlign: 'center', fontSize: 20 }}>Verifique sua conexão com a internet!</Text> */}
-              <ActivityIndicator animating={true} color="#fff" size="large" />
+          <VerificaConexao />
+          <Modal visible={loading} transparent={true}>
+            <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 20, flex: 1, backgroundColor: '#800808', opacity: 0.9 }}>
+              <View>
+                <Text style={{ color: '#fff' }}>Aguarde...</Text>
+                {/* <Text style={{ textAlign: 'center', fontSize: 20 }}>Verifique sua conexão com a internet!</Text> */}
+                <ActivityIndicator animating={true} color="#fff" size="large" />
+              </View>
             </View>
-          </View>
-        </Modal>
+          </Modal>
         </>
       );
     } else {
@@ -93,7 +113,7 @@ export default function Login({ navigation }) {
           setSenha("");
           setEmail("");
           setExibeSenha(true);
-          navigation.navigate('Cardapio',{auto:0});
+          navigation.navigate('Cardapio', { auto: 0 });
         } catch (err) {
           switch (err.code) {
             case 'auth/user-not-found':
@@ -139,19 +159,34 @@ export default function Login({ navigation }) {
     return <View />
   }
 
+  // const signIn = async () => {
+  //   try{
+  //     await GoogleSignin.hasPlayServices();
+  //     const userInfo = await GoogleSignin.signIn();
+  //     console.log(userInfo);
+  //     const credential = firebase.auth.GoogleAuthProvider.credential(userInfo.idToken);
+  //     console.log(credential)
+
+  //     //firebase.auth().currentUser.linkWithCredential(credential);
+  //     //await firebase.auth().signInWithCredential(credential);
+  //   }catch(error){
+  //     console.log(error)
+  //   }
+
+  // };
+
   return (
     <ImageBackground resizeMethod='resize' source={require("../../img/bkgEntrada.png")}
       blurRadius={3}
       opacity={1}
       style={stl.bkg}>
       <Teste />
+      <RS />
       <ScrollView>
         <View style={stl.boxImgLogo} >
           <Image style={stl.imgLogo} source={require("../../img/logo.png")} />
           <Text style={{ fontSize: 26, color: '#fff', fontWeight: 'bold' }}>JD REFEIÇÕES</Text>
         </View>
-
-        {/* <Image style={stl.imgLogo} source={require("../../img/logo.png")} /> */}
         <View style={stlLogin.boxInput}>
           <MsgErro />
           <MsgSucesso />
@@ -160,7 +195,7 @@ export default function Login({ navigation }) {
               autoCapitalize='none'
               placeholder="Entre com seu e-mail"
               keyboardType='email-address'
-              value={email}
+              value={email.trim()}
               onChangeText={email => setEmail(email)}
               autoCompleteType='email'
               leftIcon={{ type: 'font-awesome', name: 'user', color: '#fff' }}
@@ -179,7 +214,7 @@ export default function Login({ navigation }) {
               }}
 
               label="Email"
-              labelStyle={{ color: '#fff', fontSize: 22, marginBottom: 5 }}
+              labelStyle={{ color: '#fff', fontSize: 18, marginBottom: 5 }}
               inputStyle={{
                 color: '#fff',
                 backgroundColor: 'rgba(52, 52, 52, 0.5)',
@@ -216,7 +251,7 @@ export default function Login({ navigation }) {
                   padding: 0,
                 }}
                 label="Senha"
-                labelStyle={{ color: '#fff', fontSize: 22, marginBottom: 5 }}
+                labelStyle={{ color: '#fff', fontSize: 18, marginBottom: 5 }}
                 inputStyle={{
                   color: '#fff',
                   backgroundColor: 'rgba(52, 52, 52, 0.5)',
@@ -261,8 +296,19 @@ export default function Login({ navigation }) {
           </View>
           <View style={styles.areaBtnHome}>
             <TouchableOpacity onPress={() => navigation.navigate('Cadastro')}>
-              <Text style={styles.btnLink}>Cadastra-se</Text>
+              <Text style={styles.btnLink}>Cadastrar-se</Text>
             </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('RedefinirSenha',{auto:0})}>
+              <Text style={styles.btnLink}>Recuperar senha</Text>
+            </TouchableOpacity>
+          </View>
+          <View>
+            {/* <GoogleSigninButton
+              style={{ width: 192, height: 48 }}
+              size={GoogleSigninButton.Size.Wide}
+              color={GoogleSigninButton.Color.Dark}
+              onPress={()=>signIn()}
+              disabled={false} /> */}
           </View>
         </View>
       </ScrollView>
