@@ -209,7 +209,7 @@ const Cardapio = ({ navigation }) => {
     } else {
       return (
         <Card>
-          <Card.Title>Seja Bem vindo!</Card.Title>
+          <Card.Title h3={true} h3Style={{color:"#4D0303"}}>Seja Bem vindo!</Card.Title>
         </Card>
       );
     }

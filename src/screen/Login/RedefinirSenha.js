@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Modal,Button, ActivityIndicator, ScrollView, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Modal, Button, ActivityIndicator, ScrollView, TextInput } from 'react-native';
 import firebase from '@react-native-firebase/app';
 import { Icon, Card } from 'react-native-elements';
 
 
 const auth = firebase.auth();
 
-export default function RedefinirSenha({navigation}) {
+export default function RedefinirSenha({ navigation }) {
   const [email, setEmail] = useState('');
   const [msg, setMsg] = useState('');
   const [load, setLoad] = useState(false);
   const [msgErro, setMsgErro] = useState('');
 
   function EnviaRedefinicaoDeSenha() {
-    const Vazio = () =>{
+    const Vazio = () => {
       return (
         <View style={{ padding: 10, backgroundColor: '#FDC8C8', marginBottom: 20, elevation: 3, borderRadius: 5 }}>
           <Text style={{ color: "#4D0303", fontSize: 12, marginBottom: 10 }}>Digite a baixo o email que usou para fazer o cadastro em nosso App.</Text>
@@ -65,18 +65,18 @@ export default function RedefinirSenha({navigation}) {
     return (
       <ScrollView>
         <Card style={styles.modalMsg} >
-        <Icon name="envelope" color="red" solid={false} size={50} type="font-awesome-5" />
+          <Icon name="envelope" color="red" solid={false} size={50} type="font-awesome-5" />
           <Text style={{ color: "#4D0303", fontSize: 16, marginBottom: 10 }}>
             Entre em seu email e clique no link que lhe enviamos para redefinição da senha.
           </Text>
           <Text style={{ color: "#4D0303", fontSize: 16, marginBottom: 10 }}>
             Após redefinir sua senha, clique em fazer login e use a nova senha para entrar.
           </Text>
-        </Card>
-        <Card>
-          <TouchableOpacity onPress={()=> {setMsg(''); navigation.navigate('Login',{auto:0})}}>
-            <Text style={{color:'blue', textAlign:'center', fontWeight:'bold', fontSize:18}}>Fazer Login</Text>
-          </TouchableOpacity>
+          <View style={{ paddingTop: 20 }}>
+            <TouchableOpacity onPress={() => { setMsg(''); navigation.navigate('Login', { auto: 0 }) }}>
+              <Text style={{ color: 'blue', textAlign: 'center', fontSize: 14 }}>Fazer Login</Text>
+            </TouchableOpacity>
+          </View>
         </Card>
       </ScrollView>
     );
@@ -97,7 +97,7 @@ export default function RedefinirSenha({navigation}) {
             style={styles.txtInput}
             placeholder="Digite seu email"
             keyboardType='email-address'
-            onChangeText={email => {setEmail(email);setMsgErro('')}}
+            onChangeText={email => { setEmail(email); setMsgErro('') }}
             value={email}
           />
           <TouchableOpacity style={styles.btnEnviar} onPress={() => {
@@ -105,7 +105,13 @@ export default function RedefinirSenha({navigation}) {
           }}>
             {!load ? <Text style={styles.txtBtnEnviar}>Enviar</Text> : <ActivityIndicator animating={true} size="small" color="#fff" />}
           </TouchableOpacity>
+          <View style={{ paddingTop: 20 }}>
+            <TouchableOpacity onPress={() => { setMsg(''); navigation.navigate('Login', { auto: 0 }) }}>
+              <Text style={{ color: 'blue', textAlign: 'center', fontSize: 14 }}>Fazer Login</Text>
+            </TouchableOpacity>
+          </View>
         </Card>
+
       </ScrollView>
     );
   }
