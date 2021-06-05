@@ -1,12 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, } from 'react-native';
 
-export const BtnComandoCardapio = ({ prato, contaPrato, adiciona, retira }) => {
+export const BtnComandoCardapio = ({ prato, acomp, contaPrato, adiciona, retira }) => {
   return (
     <View style={aparencia.boxPrato}>
 
       <View style={{ flex: 2 }}>
-        <Text style={{ color: '#4D0303' }}>{prato}</Text>
+        <Text style={{ color: '#4D0303', fontSize: 16, fontWeight: 'bold'}}>{prato}</Text>
+        <Text style={{color:'#666', fontSize:12}}>{acomp}</Text>
       </View>
 
       <View style={{ flex: 1, alignItems: 'center' }}>

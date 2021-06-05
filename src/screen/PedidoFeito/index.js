@@ -42,7 +42,7 @@ export default function PedidoFeito({ navigation }) {
 
       let pd = pdd.Pedido.map((item, index) => {
         return (
-          <View key={index}>
+          <ScrollView key={index}>
             <View style={estlTML.boxTxtM}>
               <Text style={estlTML.txtChave}>Pedido:</Text>
               <Text style={estlTML.txtValor}>{item.ContaPedidos + 1}</Text>
@@ -68,7 +68,7 @@ export default function PedidoFeito({ navigation }) {
             <View>
               {contaPedidos > 1 ? <Card.Divider style={{ marginTop: 10 }} /> : null}
             </View>
-          </View>
+          </ScrollView>
         );
       });
       return pd;

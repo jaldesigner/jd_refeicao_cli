@@ -21,6 +21,8 @@ import Finalizacao from './screen/Finlizacao';
 import PedidoFeito from './screen/PedidoFeito';
 import Configuracao from './screen/Configuracao';
 import RedefinirSenha from './screen/Login/RedefinirSenha';
+import Perfil from './screen/Perfil/index';
+import EditarPerfil from './screen/Perfil/components/editar_perfil';
 import {Navleft} from './components/menu';
 
 const Drawer = createDrawerNavigator();
@@ -77,6 +79,12 @@ const Router = () => {
           options={{ headerTransparent: true, title: false, headerLeft: null }}
         />
         <Drawer.Screen name="PedidoFeito" component={PedidoFeito}
+          options={{ headerTransparent: true, title: false, headerLeft: null }}
+        />
+        <Drawer.Screen name="Perfil" component={Perfil}
+          options={{ headerTransparent: true, title: false, headerLeft: null }}
+        />
+        <Drawer.Screen name="EditarPerfil" component={EditarPerfil}
           options={{ headerTransparent: true, title: false, headerLeft: null }}
         />
         <Drawer.Screen name="Configuracao" component={Configuracao}

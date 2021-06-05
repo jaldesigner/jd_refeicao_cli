@@ -123,8 +123,8 @@ const Cardapio = ({ navigation }) => {
           setPedidos(pedidos);
         };
 
-        var acmp = listalp.acompanhamento == '' ? '' : ' com ' + listalp.acompanhamento;
-        var acmp = acmp.replace(',', ' e ')
+        var acmp = listalp.acompanhamento == '' ? '' : '' + listalp.acompanhamento;
+        //var acmp = acmp.replace(',', ' e ')
 
         //console.log(item.data().Cardapio[1]);
 
@@ -132,7 +132,8 @@ const Cardapio = ({ navigation }) => {
           return (
             <View key={indexLP}>
               <BtnComandoCardapio
-                prato={listalp.prato + (acmp)}
+                prato={listalp.prato}
+                acomp={(acmp)}
                 contaPrato={getOccurrence(arrayPedidos(pedidos), listalp.prato)}
                 adiciona={acrescentaPedido}
                 retira={retiraPedido} />

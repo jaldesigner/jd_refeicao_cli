@@ -104,15 +104,17 @@ const Tamanho = ({ navigation }) => {
           <Card.Title style={{
             color: '#800808',
             fontSize: 18,
-            marginTop: 10,
-            paddingLeft: 5,
-            paddingRight: 5
-          }}>
+          }} h4={true}>
             {
-              prt.acompanhamento == '' ? prt.prato : prt.prato + " com " + prt.acompanhamento
+              prt.acompanhamento == '' ? prt.prato : prt.prato
               /* {prt.prato} com {prt.acompanhamento} */
             }
           </Card.Title>
+          <View>
+            <Text style={{textAlign:'center',color:'#666',fontSize:12, marginBottom:10}}>
+              { prt.acompanhamento}
+            </Text>
+          </View>
           <View>
             {valmed}
           </View>

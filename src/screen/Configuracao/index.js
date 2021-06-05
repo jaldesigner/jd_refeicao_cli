@@ -69,7 +69,7 @@ const Configuracao = ({navigation}) => {
             </View>
 
             <View>
-              <TouchableOpacity onPress={() => alert("Em Breve...")} style={styles.boxLinks} >
+              <TouchableOpacity onPress={() => navigation.navigate('Perfil',{auto:0})} style={styles.boxLinks} >
                 <View style={styles.boxIcon}>
                   <Icon color="#4D0303" name="address-card" type="font-awesome-5" />
                 </View>
