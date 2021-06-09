@@ -68,6 +68,7 @@ const Configuracao = ({ navigation }) => {
       /* -------------------------------------------------------------------------- */
       let Rua = DD.Rua;
       let Numero = DD.Numero;
+      let Complemento = DD.Complemento;
       let Cep = DD.Cep;
       let Bairro = DD.Bairro;
       let Cidade = DD.Cidade;
@@ -77,7 +78,7 @@ const Configuracao = ({ navigation }) => {
       return (
         <View key={index} >
           <Card>
-            <Card.Title h4={true}>Dados Pessoais</Card.Title>
+            <Card.Title h4={true} h4Style={{color:"#4d0303"}}>Dados Pessoais</Card.Title>
             <Card.Divider />
             <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
               <TouchableOpacity
@@ -94,22 +95,22 @@ const Configuracao = ({ navigation }) => {
                 <Icon size={15} color="#ffffff" name="edit" type="font-awesome-5" />
               </TouchableOpacity>
             </View>
-            <View>
-              <Text>Nome/apelido:</Text>
-              <Text>{Nome}</Text>
+            <View style={styles.boxChaveValor}>
+              <Text style={styles.chave}>Nome:</Text>
+              <Text style={styles.valor}>{Nome}</Text>
             </View>
-            <View>
-              <Text>Email:</Text>
-              <Text>{Email}</Text>
+            <View style={styles.boxChaveValor}>
+              <Text style={styles.chave}>Email:</Text>
+              <Text style={styles.valor}>{Email}</Text>
             </View>
-            <View>
-              <Text>Telefone:</Text>
-              <Text>{Telefone}</Text>
+            <View style={styles.boxChaveValor}>
+              <Text style={styles.chave}>Telefone:</Text>
+              <Text style={styles.valor}>{Telefone}</Text>
             </View>
           </Card>
 
           <Card>
-            <Card.Title h4={true}>Endereço</Card.Title>
+            <Card.Title h4={true} h4Style={{color:"#4d0303"}} >Endereço</Card.Title>
             <Card.Divider />
             <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
               <TouchableOpacity
@@ -126,25 +127,29 @@ const Configuracao = ({ navigation }) => {
                 <Icon size={15} color="#ffffff" name="edit" type="font-awesome-5" />
               </TouchableOpacity>
             </View>
-            <View>
-              <Text>Rua:</Text>
-              <Text>{Rua}</Text>
+            <View style={styles.boxChaveValor}>
+              <Text style={styles.chave}>Rua:</Text>
+              <Text style={styles.valor}>{Rua}</Text>
             </View>
-            <View>
-              <Text>CEP:</Text>
-              <Text>{Cep}</Text>
+            <View style={styles.boxChaveValor}>
+              <Text style={styles.chave}>Número:</Text>
+              <Text style={styles.valor}>{Numero}</Text>
             </View>
-            <View>
-              <Text>Número:</Text>
-              <Text>{Numero}</Text>
+            <View style={styles.boxChaveValor}>
+              <Text style={styles.chave}>Complemento:</Text>
+              <Text style={styles.valor}>{Complemento}</Text>
             </View>
-            <View>
-              <Text>Bairro:</Text>
-              <Text>{Bairro}</Text>
+            <View style={styles.boxChaveValor}>
+              <Text style={styles.chave}>CEP:</Text>
+              <Text style={styles.valor}>{Cep}</Text>
             </View>
-            <View>
-              <Text>Cidade:</Text>
-              <Text>{Cidade}</Text>
+            <View style={styles.boxChaveValor}>
+              <Text style={styles.chave}>Bairro:</Text>
+              <Text style={styles.valor}>{Bairro}</Text>
+            </View>
+            <View style={styles.boxChaveValor}>
+              <Text style={styles.chave}>Cidade:</Text>
+              <Text style={styles.valor}>{Cidade}</Text>
             </View>
           </Card>
 
@@ -159,7 +164,7 @@ const Configuracao = ({ navigation }) => {
     <>
       <HeaderGeral />
       <ScrollView>
-        <Header />
+        {/* <Header /> */}
         <DadosPerfil />
       </ScrollView>
     </>
@@ -213,6 +218,22 @@ const styles = StyleSheet.create({
   },
   txtLink: {
     color: '#C23A0F'
-  }
+  },
+  boxChaveValor:{
+    flexDirection:'row',
+    marginTop:10
+  },
+  chave:{
+    flex:1,
+    color:'#4d0303',
+    fontWeight: 'bold',
+    fontSize:18,
+  },
+  valor:{
+    flex:2,
+    color:"#C23A0F",
+    fontSize: 16,
+    marginLeft:10
+  },
 
 });

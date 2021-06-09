@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 //import { useFocusEffect } from '@react-navigation/native';
-import { StyleSheet, Text, View, TouchableOpacity, BackHandler, Alert } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 import db from '@react-native-firebase/firestore';
@@ -57,7 +57,7 @@ const Configuracao = ({navigation}) => {
               </TouchableOpacity>
             </View>
 
-            <View>
+            {/* <View>
               <TouchableOpacity onPress={() => alert("Em Breve...")} style={styles.boxLinks} >
                 <View style={styles.boxIcon}>
                   <Icon color="#4D0303" name="clipboard-list" type="font-awesome-5" />
@@ -66,7 +66,7 @@ const Configuracao = ({navigation}) => {
                   <Text style={styles.txtLink}>Pedidos</Text>
                 </View>
               </TouchableOpacity>
-            </View>
+            </View> */}
 
             <View>
               <TouchableOpacity onPress={() => navigation.navigate('Perfil',{auto:0})} style={styles.boxLinks} >

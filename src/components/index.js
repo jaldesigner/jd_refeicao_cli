@@ -3,7 +3,7 @@ import { View, Text, Image, ImageBackground, TouchableOpacity } from 'react-nati
 import { Icon, Card, Input } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { styles } from '../style';
-import DadosApp from '../config/index_bkp';
+import DadosApp from '../config/';
 
 const INF = DadosApp();
 

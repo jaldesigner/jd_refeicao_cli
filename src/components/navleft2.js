@@ -78,7 +78,7 @@ const navleft = ({ ...props }) => {
           </TouchableOpacity>
         </View>
 
-        <View>
+        {/* <View>
           <TouchableOpacity onPress={() => {
             Sobre()
           }} style={styles.boxLinks} >
@@ -89,7 +89,7 @@ const navleft = ({ ...props }) => {
               <Text style={styles.txtLink}>Sobre</Text>
             </View>
           </TouchableOpacity>
-        </View>
+        </View> */}
 
         <View>
           <TouchableOpacity onPress={() => {

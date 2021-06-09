@@ -185,7 +185,7 @@ export default function Login({ navigation }) {
       <ScrollView>
         <View style={stl.boxImgLogo} >
           <Image style={stl.imgLogo} source={require("../../img/logo.png")} />
-          <Text style={{ fontSize: 26, color: '#fff', fontWeight: 'bold' }}>JD REFEIÇÕES</Text>
+          <Text style={{ fontSize: 26, color: '#fff', fontWeight: 'bold' }}>DART DELIVERY</Text>
         </View>
         <View style={stlLogin.boxInput}>
           <MsgErro />
