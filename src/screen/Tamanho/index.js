@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { Card, Button} from 'react-native-elements';
+import { Card, Button } from 'react-native-elements';
 import { ActivityIndicator, View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import db, { firebase } from '@react-native-firebase/firestore';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -42,10 +42,8 @@ const Tamanho = ({ navigation }) => {
     setAtu(0);
   }, [atu]);
 
-  useEffect(() => {
-    //console.log(pedidos.length);
+  useFocusEffect(useCallback(() => {
     let arrayUndefined = [];
-
     pedidos.forEach(element => {
       arrayUndefined.push(element.Key);
     })
@@ -54,9 +52,11 @@ const Tamanho = ({ navigation }) => {
 
     if (verifica == -1) {
       setComboAtivo(true);
+    } else {
+      setComboAtivo(false);
     }
     setAtu(0);
-  }, [atu])
+  }, [atu]))
 
   const ListaPedidos = () => {
     const pdd = pedidos.map((prt, indexPrt) => {
@@ -77,13 +77,13 @@ const Tamanho = ({ navigation }) => {
                     }} >
                     <View style={prt.Key == indexInfo ? styles.radioButtomAtivo : styles.radioButtom} >
                       {/* <Text style={styles.txt1}>{info.medida + ' - R$' + info.valor}</Text> */}
-                      <View style={{flex: 3}}>
+                      <View style={{ flex: 3 }}>
                         <Text style={styles.txt1}>{info.medida}</Text>
                       </View>
-                      <View style={{flex: 3}}>
-                        <Text style={{color: '#C23A0F', textAlign:'center'}}>{'R$' + info.valor}</Text>
+                      <View style={{ flex: 3 }}>
+                        <Text style={{ color: '#C23A0F', textAlign: 'center' }}>{'R$' + info.valor}</Text>
                       </View>
-                      <View style={{flex: 3}}>
+                      <View style={{ flex: 3 }}>
                         <View style={styles.circuloRadio}>
                           <View style={prt.Key == indexInfo ? styles.circuloRDAtivo : null} />
                         </View>
@@ -111,8 +111,8 @@ const Tamanho = ({ navigation }) => {
             }
           </Card.Title>
           <View>
-            <Text style={{textAlign:'center',color:'#666',fontSize:12, marginBottom:10}}>
-              { prt.acompanhamento}
+            <Text style={{ textAlign: 'center', color: '#666', fontSize: 12, marginBottom: 10 }}>
+              {prt.acompanhamento}
             </Text>
           </View>
           <View>

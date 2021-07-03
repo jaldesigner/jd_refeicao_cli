@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, ScrollView, TouchableOpacity, StyleSheet, ImageBackground, Image, Button, ActivityIndicator, Modal } from 'react-native';
+import { Text, View, ScrollView, TouchableOpacity, StyleSheet, ImageBackground, Image, ActivityIndicator, Modal, StatusBar } from 'react-native';
 import NetInf from '@react-native-community/netinfo';
-import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-google-signin/google-signin';
 import { Input, Icon } from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 import { styles } from '../../style';
 import RedefinirSenha from './RedefinirSenha';
+import INF from '../../config';
+import base64 from 'react-native-base64';
 
-GoogleSignin.configure({
-  webClientId: '142759402212-rb73qd22lnlooja0l9o17d5v36q08oql.apps.googleusercontent.com',
-});
-
+const INFO = INF();
 const aut = auth();
 
 export default function Login({ navigation }) {
@@ -25,6 +23,7 @@ export default function Login({ navigation }) {
   const [loading, setLoading] = useState(false);
   const [infoUser, setInfoUser] = useState('');
   const [rsModal, setRsModal] = useState(false);
+  const [ld, setLd] = useState(false);
 
 
   useEffect(() => {
@@ -43,9 +42,11 @@ export default function Login({ navigation }) {
   }, [uid]);
 
   useEffect(() => {
+
     NetInf.fetch().then(state => {
       setConex(state);
       setLoading(conex.isConnected);
+
     });
 
     const unsubscribe = NetInf.addEventListener(state => {
@@ -76,7 +77,7 @@ export default function Login({ navigation }) {
           {/* <Image style={stl.imgLogo} source={require("../../img/logo.png")} /> */}
         </View>
         <RedefinirSenha />
-       
+
       </Modal>
     );
   }
@@ -113,7 +114,13 @@ export default function Login({ navigation }) {
           setSenha("");
           setEmail("");
           setExibeSenha(true);
-          navigation.navigate('Cardapio', { auto: 0 });
+          setLd(true);
+
+          setTimeout(() => {
+            setLd(false);
+            navigation.navigate('Cardapio', { auto: 0 });
+          }, 5000);
+
         } catch (err) {
           switch (err.code) {
             case 'auth/user-not-found':
@@ -159,83 +166,32 @@ export default function Login({ navigation }) {
     return <View />
   }
 
-  // const signIn = async () => {
-  //   try{
-  //     await GoogleSignin.hasPlayServices();
-  //     const userInfo = await GoogleSignin.signIn();
-  //     console.log(userInfo);
-  //     const credential = firebase.auth.GoogleAuthProvider.credential(userInfo.idToken);
-  //     console.log(credential)
-
-  //     //firebase.auth().currentUser.linkWithCredential(credential);
-  //     //await firebase.auth().signInWithCredential(credential);
-  //   }catch(error){
-  //     console.log(error)
-  //   }
-
-  // };
-
   return (
-    <ImageBackground resizeMethod='resize' source={require("../../img/bkgEntrada.png")}
-      blurRadius={3}
-      opacity={1}
-      style={stl.bkg}>
-      <Teste />
-      <RS />
-      <ScrollView>
-        <View style={stl.boxImgLogo} >
-          <Image style={stl.imgLogo} source={require("../../img/logo.png")} />
-          <Text style={{ fontSize: 26, color: '#fff', fontWeight: 'bold' }}>DART DELIVERY</Text>
-        </View>
-        <View style={stlLogin.boxInput}>
-          <MsgErro />
-          <MsgSucesso />
-          <View>
-            <Input
-              autoCapitalize='none'
-              placeholder="Entre com seu e-mail"
-              keyboardType='email-address'
-              value={email.trim()}
-              onChangeText={email => setEmail(email)}
-              autoCompleteType='email'
-              leftIcon={{ type: 'font-awesome', name: 'user', color: '#fff' }}
-              leftIconContainerStyle={{
-                backgroundColor: '#222',
-                borderTopLeftRadius: 10,
-                borderBottomLeftRadius: 10,
-                paddingLeft: 10,
-                paddingRight: 10,
-                width: 50,
-                height: 50,
-              }}
-
-              inputContainerStyle={{
-                borderBottomWidth: 0,
-              }}
-
-              label="Email"
-              labelStyle={{ color: '#fff', fontSize: 18, marginBottom: 5 }}
-              inputStyle={{
-                color: '#fff',
-                backgroundColor: 'rgba(52, 52, 52, 0.5)',
-                padding: 0,
-                paddingLeft: 5,
-                height: 50,
-                borderTopRightRadius: 10,
-                borderBottomRightRadius: 10,
-              }}
-            />
+    <>
+      <ImageBackground resizeMethod='resize' source={require("../../img/bkgEntrada.png")}
+        blurRadius={3}
+        opacity={1}
+        style={stl.bkg}>
+        <StatusBar backgroundColor="#4d0303" />
+        <Teste />
+        <RS />
+        <ScrollView>
+          <View style={stl.boxImgLogo} >
+            <Image style={stl.imgLogo} source={require("../../img/logo.png")} />
+            <Text style={{ fontSize: 26, color: '#fff', fontWeight: 'bold' }}>{INFO.Nome_App.toUpperCase()}</Text>
           </View>
-          <View style={{ flexDirection: 'row' }}>
-            <View style={{ flex: 1 }}>
+          <View style={stlLogin.boxInput}>
+            <MsgErro />
+            <MsgSucesso />
+            <View>
               <Input
                 autoCapitalize='none'
-                placeholder="Entre com sua senha"
-                autoCompleteType='password'
-                secureTextEntry={exibeSenha}
-                value={senha}
-                onChangeText={senha => setSenha(senha)}
-                leftIcon={{ type: 'font-awesome', name: 'lock', color: '#fff' }}
+                placeholder="Entre com seu e-mail"
+                keyboardType='email-address'
+                value={email.trim()}
+                onChangeText={email => setEmail(email)}
+                autoCompleteType='email'
+                leftIcon={{ type: 'font-awesome', name: 'user', color: '#fff' }}
                 leftIconContainerStyle={{
                   backgroundColor: '#222',
                   borderTopLeftRadius: 10,
@@ -243,76 +199,127 @@ export default function Login({ navigation }) {
                   paddingLeft: 10,
                   paddingRight: 10,
                   width: 50,
-                  height: 50
+                  height: 50,
                 }}
+
                 inputContainerStyle={{
                   borderBottomWidth: 0,
-                  margin: 0,
-                  padding: 0,
                 }}
-                label="Senha"
+
+                label="Email"
                 labelStyle={{ color: '#fff', fontSize: 18, marginBottom: 5 }}
                 inputStyle={{
                   color: '#fff',
                   backgroundColor: 'rgba(52, 52, 52, 0.5)',
-                  elevation: 2,
-                  marginRight: 0,
                   padding: 0,
                   paddingLeft: 5,
                   height: 50,
                   borderTopRightRadius: 10,
                   borderBottomRightRadius: 10,
                 }}
-
               />
             </View>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{ flex: 1 }}>
+                <Input
+                  autoCapitalize='none'
+                  placeholder="Entre com sua senha"
+                  autoCompleteType='password'
+                  secureTextEntry={exibeSenha}
+                  value={senha}
+                  onChangeText={senha => setSenha(senha)}
+                  leftIcon={{ type: 'font-awesome', name: 'lock', color: '#fff' }}
+                  leftIconContainerStyle={{
+                    backgroundColor: '#222',
+                    borderTopLeftRadius: 10,
+                    borderBottomLeftRadius: 10,
+                    paddingLeft: 10,
+                    paddingRight: 10,
+                    width: 50,
+                    height: 50
+                  }}
+                  inputContainerStyle={{
+                    borderBottomWidth: 0,
+                    margin: 0,
+                    padding: 0,
+                  }}
+                  label="Senha"
+                  labelStyle={{ color: '#fff', fontSize: 18, marginBottom: 5 }}
+                  inputStyle={{
+                    color: '#fff',
+                    backgroundColor: 'rgba(52, 52, 52, 0.5)',
+                    elevation: 2,
+                    marginRight: 0,
+                    padding: 0,
+                    paddingLeft: 5,
+                    height: 50,
+                    borderTopRightRadius: 10,
+                    borderBottomRightRadius: 10,
+                  }}
+
+                />
+              </View>
 
 
-          </View>
-          <View style={{ position: 'relative', top: -15, }}>
-            <TouchableOpacity onPress={() => exibeSenha ? setExibeSenha(false) : setExibeSenha(true)}
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}
-            >
+            </View>
+            <View style={{ position: 'relative', top: -15, }}>
+              <TouchableOpacity onPress={() => exibeSenha ? setExibeSenha(false) : setExibeSenha(true)}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}
+              >
 
-              <Icon name={!exibeSenha ? "eye" : "eye-slash"} size={15} type="font-awesome-5" color="#fff" style=
-                {{
-                  backgroundColor: '#222',
-                  borderRadius: 20,
-                  margin: 10,
-                  padding: 5,
-                }} />
-              <Text style={{ color: '#fff', fontSize: 14 }}>{exibeSenha ? 'Mostrar senha' : 'Esconder senha'}</Text>
+                <Icon name={!exibeSenha ? "eye" : "eye-slash"} size={15} type="font-awesome-5" color="#fff" style=
+                  {{
+                    backgroundColor: '#222',
+                    borderRadius: 20,
+                    margin: 10,
+                    padding: 5,
+                  }} />
+                <Text style={{ color: '#fff', fontSize: 14 }}>{exibeSenha ? 'Mostrar senha' : 'Esconder senha'}</Text>
 
-            </TouchableOpacity>
-          </View>
+              </TouchableOpacity>
+            </View>
 
-          <View style={{ marginTop: 0, }}>
-            <TouchableOpacity onPress={() => logar()} style={styles.btnY}>
-              <Text style={stl.txtBtnEntrar}>Entrar</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.areaBtnHome}>
-            <TouchableOpacity onPress={() => navigation.navigate('Cadastro')}>
-              <Text style={styles.btnLink}>Cadastrar-se</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('RedefinirSenha',{auto:0})}>
-              <Text style={styles.btnLink}>Recuperar senha</Text>
-            </TouchableOpacity>
-          </View>
-          <View>
-            {/* <GoogleSigninButton
+            <View style={{ marginTop: 0, }}>
+              <TouchableOpacity
+                disabled={ld}
+                onPress={() => {
+                  logar();
+
+                  if (ld == true) {
+                    console.log('Veio Aqui');
+                  }
+
+                }} style={styles.btnY}>
+                <Text style={stl.txtBtnEntrar}>{ld ? <ActivityIndicator color="#fff" size="small" animating={true} /> : 'Entrar'}</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.areaBtnHome}>
+              <TouchableOpacity
+                disabled={ld}
+                onPress={() => navigation.navigate('Cadastro')}>
+                <Text style={styles.btnLink}>Cadastrar-se</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                disabled={ld}
+                onPress={() => navigation.navigate('RedefinirSenha', { auto: 0 })}>
+                <Text style={styles.btnLink}>Recuperar senha</Text>
+              </TouchableOpacity>
+            </View>
+            <View>
+              {/* <GoogleSigninButton
               style={{ width: 192, height: 48 }}
               size={GoogleSigninButton.Size.Wide}
               color={GoogleSigninButton.Color.Dark}
               onPress={()=>signIn()}
               disabled={false} /> */}
+            </View>
           </View>
-        </View>
-      </ScrollView>
-    </ImageBackground>
+        </ScrollView>
+      </ImageBackground>
+    </>
   );
 }
 

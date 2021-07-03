@@ -3,7 +3,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
 import db from '@react-native-firebase/firestore';
 import { Card, Divider } from 'react-native-elements';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Modal, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { HeaderGeral } from '../../components';
 import { styles } from '../../style';
@@ -13,6 +13,7 @@ import { BtnComandoCardapio } from '../../components/btnComandoCardapio';
 import Seg from "../../config/seg";
 import moment from 'moment';
 import 'moment/locale/pt-br';
+import CheckNet from '../../components/checknet';
 
 const HoraS = moment().format('LTS');
 const InfData = moment().format('L');
@@ -26,8 +27,33 @@ const Cardapio = ({ navigation }) => {
   const [arrayPratoDia, setArrayPratoDia] = useState([]);
   const [ck2, setCk2] = useState();
   const [temPedidos, setTemPedidos] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  if (!auth().currentUser.uid) {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Login' }]
+    })
+  }
+  //const [uid, setUid] = useState('');
 
   //console.log(auth().currentUser.providerData);
+
+  // useEffect(() => {
+
+  //   const at = aut.onUserChanged((user) => {
+  //     if (!user) {
+  //       setUid(auth().currentUser.uid);
+  //       props.navigation.navigate("Login", { auto: 0 });
+  //     }
+
+  //   });
+
+  //   return () => {
+  //     at();
+  //   }
+
+  // }, []);
 
   useFocusEffect(React.useCallback(() => {
     //Cadastro 1
@@ -67,6 +93,9 @@ const Cardapio = ({ navigation }) => {
 
   useFocusEffect(React.useCallback(() => {
     setPedidos(pedidos);
+    setTimeout(() => {
+      setLoading(false);
+    }, 5000);
   }, [pedidos]));
 
   const arrayPedidos = (array) => {
@@ -84,11 +113,13 @@ const Cardapio = ({ navigation }) => {
   }
 
   useFocusEffect(React.useCallback(() => {
+
     const pratoDia = PathDB.collection('CardapioDoDia')
       .where('Data', '==', InfData)
       .onSnapshot(snp => {
         setArrayPratoDia(snp.docs);
       })
+
   }, [])); //busca o cardápio do dia
 
   useFocusEffect(React.useCallback(() => {
@@ -210,7 +241,7 @@ const Cardapio = ({ navigation }) => {
     } else {
       return (
         <Card>
-          <Card.Title h3={true} h3Style={{color:"#4D0303"}}>Seja Bem vindo!</Card.Title>
+          <Card.Title h3={true} h3Style={{ color: "#4D0303" }}>Seja Bem vindo!</Card.Title>
         </Card>
       );
     }
@@ -220,16 +251,28 @@ const Cardapio = ({ navigation }) => {
   }
 
   return (
-    <SafeAreaView>
-      <ScrollView>
-        <HeaderGeral tituloHead="Cardápio" />
-        <TemPedido />
-        {ComMenu()}
-        <View>
-          {SemMenu()}
+    <>
+      <Modal visible={loading} animationType="fade">
+        <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'column', flex: 1 }}>
+          <ActivityIndicator animating={true} color="#4d0303" size="large" />
+          <Text>Aguarde...</Text>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      </Modal>
+      <StatusBar backgroundColor="#4d0303" animated={true} />
+      <SafeAreaView>
+        <ScrollView>
+          <HeaderGeral tituloHead="Cardápio" />
+          <TemPedido />
+            {ComMenu()}
+          <View>
+            {SemMenu()}
+          </View>
+          <View>
+
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </>
   );
 
 
